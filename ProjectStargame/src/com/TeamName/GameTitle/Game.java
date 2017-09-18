@@ -19,13 +19,14 @@ public class Game implements Runnable {
 	private Graphics g;
 	
 	public Game(String title, int width, int height){
-		this.ScreenHeight = width;
+		this.ScreenWidth = width;
 		this.ScreenHeight = height;
+		System.out.println(width + " , " + height);
 		this.title = title;
 	}
 	
 	private void init(){
-		display = new Display(title, ScreenHeight, ScreenHeight);
+		display = new Display(title, ScreenWidth , ScreenHeight);
 		Assets.loadSpriteSheets();
 	}
 	
@@ -47,7 +48,7 @@ public class Game implements Runnable {
 		}
 		g = bs.getDrawGraphics();
 		//Clear
-		g.clearRect(0, 0, ScreenHeight, ScreenHeight);
+		g.clearRect(0, 0, ScreenWidth, ScreenHeight);
 		//Draw Here!
 		{
 		
@@ -65,14 +66,37 @@ public class Game implements Runnable {
 		
 		init();
 		
-		//Game Loop
+		
+		int fps = Constants.fps;
+		double timePerTick = 1000000000 / fps;
+		double delta = 0;
+		long now;
+		long timer = 0;
+		long ticks = 0;
+		long lastTime = System.nanoTime();
+		
+		//GAME LOOP
 		while(running){
-			tick();
-			render();
+			now = System.nanoTime();
+			delta += (now-lastTime) / timePerTick;
+			timer += now - lastTime;
+			lastTime = now;
+			
+			if(delta >= 1) {
+				tick();
+				render();
+				ticks++;
+				delta--;
+			}
+			
+			if(timer >= 1000000000) {
+				System.out.println("TPS: " + ticks);
+				ticks = 0;
+				timer = 0;
+			}
 		}
 		
 		stop();
-		
 	}
 	
 	public synchronized void start(){
