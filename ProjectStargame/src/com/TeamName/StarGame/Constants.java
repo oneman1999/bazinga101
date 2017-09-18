@@ -1,4 +1,4 @@
-package com.TeamName.GameTitle;
+package com.TeamName.StarGame;
 
 public class Constants {
 

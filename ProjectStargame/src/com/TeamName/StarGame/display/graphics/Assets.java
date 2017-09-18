@@ -1,4 +1,4 @@
-package com.TeamName.GameTitle.display.graphics;
+package com.TeamName.StarGame.display.graphics;
 
 import java.awt.image.BufferedImage;
 

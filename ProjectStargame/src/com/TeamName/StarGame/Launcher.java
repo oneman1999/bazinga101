@@ -1,4 +1,4 @@
-package com.TeamName.GameTitle;
+package com.TeamName.StarGame;
 
 import java.awt.GraphicsEnvironment;
 
