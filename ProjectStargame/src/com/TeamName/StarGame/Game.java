@@ -3,43 +3,77 @@ package com.TeamName.StarGame;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
+import com.TeamName.StarGame.GameState.GameState;
+import com.TeamName.StarGame.GameState.GameStateManager;
+import com.TeamName.StarGame.GameState.MainMenuState;
+import com.TeamName.StarGame.GameState.PlayingGameState;
 import com.TeamName.StarGame.display.Display;
 import com.TeamName.StarGame.display.graphics.Assets;
+import com.TeamName.StarGame.input.KeyManager;
 
 public class Game implements Runnable {
 
+	
+	
+	//Display
 	private Display display;
 	public int ScreenWidth, ScreenHeight;
 	public String title;
 	
+	//Core
 	private boolean running = false;
 	private Thread thread;
 	
+	//Graphics
 	private BufferStrategy bs;
 	private Graphics g;
+	
+	//GameStates
+	@SuppressWarnings("unused")
+	private GameState mainMenuState;
+	private GameState playingGameState;
+	
+	//Input
+	private KeyManager keyManager;
+	
 	
 	public Game(String title, int width, int height){
 		this.ScreenWidth = width;
 		this.ScreenHeight = height;
 		System.out.println(width + " , " + height);
 		this.title = title;
+		keyManager = new KeyManager();
 	}
 	
 	private void init(){
 		display = new Display(title, ScreenWidth , ScreenHeight);
-		Assets.loadSpriteSheets();
+		display.getFrame().addKeyListener(keyManager);
+		Assets.loadImages();
+		
+		//Initializing GameStates
+		mainMenuState = new MainMenuState(this);
+		playingGameState = new PlayingGameState(this);
+		
+		
+		//Setting state
+		GameStateManager.setGameState(playingGameState);
 	}
 	
 	/**
 	 * GAME UPDATE METHOD
 	 */
 	private void tick(){
-		
+		keyManager.tick();
+		if(GameStateManager.getGameState() != null) {
+			GameStateManager.getGameState().tick();
+		}
 	}
 	
 	/**
 	 * MAIN RENDER METHOD
 	 */
+	
+	
 	private void render(){
 		bs = display.getCanvas().getBufferStrategy();
 		if(bs == null){
@@ -51,10 +85,9 @@ public class Game implements Runnable {
 		g.clearRect(0, 0, ScreenWidth, ScreenHeight);
 		//Draw Here!
 		{
-		
-			
-			
-			
+			if(GameStateManager.getGameState() != null) {
+				GameStateManager.getGameState().render(g);
+			}
 		}	
 		//End Drawing!
 		bs.show();
@@ -116,6 +149,10 @@ public class Game implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public KeyManager getKeyManager() {
+		return keyManager;
 	}
 	
 }

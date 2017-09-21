@@ -6,7 +6,7 @@ public class Launcher {
 	
 	
 	public static void main(String[] args){
-		Game game = new Game("Stargame",
+		Game game = new Game(Constants.Title,
 				 Math.round(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width * Constants.WindowScale) ,
 				 Math.round(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height * Constants.WindowScale));
 		

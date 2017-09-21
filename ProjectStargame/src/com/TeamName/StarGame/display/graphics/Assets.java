@@ -8,6 +8,15 @@ public class Assets {
 	public static BufferedImage sprite0;
 	public static BufferedImage sprite1;
 	
+	//test code
+	public static BufferedImage player;
+	
+	
+	public static void loadImages() {
+		loadSpriteSheets();
+		player = ImageLoader.loadImage("/textures/test.png");
+	}
+	
 	
 	
 	public static void loadSpriteSheets(){
